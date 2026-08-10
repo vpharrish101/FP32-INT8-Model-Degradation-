@@ -13,8 +13,8 @@ ov.Core().set_property(
     {"INFERENCE_NUM_THREADS": 1}
 )
 
-def benchmark(MODEL_PATH):
-    y_onnx=ultralytics.YOLO(MODEL_PATH,task="detect")
+def benchmark(MODEL_PATH,DEGRADE_ID=None):
+    y_vino=ultralytics.YOLO(MODEL_PATH,task="detect")
     y_csv=pd.read_csv("data/coco2017/coco_500_val.csv")
     y_coco=pycocotools.coco.COCO("data/coco2017/annotations/instances_val2017.json")
 
@@ -33,11 +33,13 @@ def benchmark(MODEL_PATH):
     for _, row in y_csv.iterrows():
 
         image_id=int(row["id"])
-        img_path=(f"data/coco2017/val2017/"f"{row['file_name']}")
+        if DEGRADE_ID:
+            img_path = f"data/coco2017/degraded/{DEGRADE_ID}/{row['file_name']}"
+        else:
+            img_path = f"data/coco2017/val2017/{row['file_name']}"
 
         t0=time.perf_counter()
-
-        result=y_onnx(
+        result=y_vino(
             img_path,
             device="cpu",
             verbose=False)[0]
