@@ -163,3 +163,46 @@ The motion-blur calibration improved the INT8 model, but only by a small amount 
 - Develop a pre-processing CNN model that is trained on pairs of images and blurred images, to reduce blur in images before letting the models predict. 
 - Repeat the evaluation across multiple random 500-image subsets to determine whether the observed improvements are statistically consistent.
 - Compare different calibration-set sizes and compositions to determine how much blur data is actually required.
+
+## Setup: -
+1. Fork this repository, and set the project root as cwd.
+2. Download the coco2017 dataset of train and val, and place them in `<project_root>/data/coco2017/`. The final folder structure should resemble
+   
+```
+FP32-INT8-Model-Degradation-/
+├── data/
+│   └── coco2017/
+│       ├── annotations/
+│       ├── degraded/
+│       │   ├── downscale50/
+│       │   ├── jpeg30/
+│       │   ├── low_light/
+│       │   ├── motion_blur/
+│       │   └── motion_blur_calibration/
+│       ├── train2017/
+│       ├── val2017/
+│       ├── coco_500_val.csv
+│       └── coco_1000_train.csv
+│
+├── models/
+│   └── yolo11n.pt
+│
+├── src/
+│   ├── utils/
+│   │   ├── __init__.py
+│   │   ├── COCO_val_sampler.py
+│   │   ├── degrade.py
+│   │   └── quantizer.py
+│   │
+│   ├── __init__.py
+│   ├── blur_calibration.py
+│   ├── Degraded_metrics.py
+│   ├── FP32_metrics.py
+│   └── main.py
+│
+├── blur_coco_calib.yaml
+├── coco_calib.yaml
+└── README.md
+```
+3. Execute command `pip install -r requirements.txt' to install required packages
+4. Execute command 'python -m src.main' to run the codebase. The results must be printed at terminal.
