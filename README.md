@@ -1,4 +1,4 @@
-# FP32 vs INT8 — Evaluation Report
+# FP32 vs INT8 Evaluation Report
 
 ## 1. Clean Evaluation
 
@@ -34,7 +34,7 @@
 | P95 latency | 19.74 ms | 12.18 ms |
 | FPS | 53.59 | 90.98 |
 
-INT8 gives approximately **1.70× lower mean latency**.
+INT8 provides approximately **1.70x higher throughput**.
 
 ### Model Size
 
@@ -55,14 +55,14 @@ The same 500 images were used for every degradation.
 |---|---:|---:|
 | Clean | 0.529 | 0.520 |
 | Motion blur | 0.223 | 0.220 |
-| Low light (γ=2.0) | 0.501 | 0.498 |
+| Low light (gamma=2.0) | 0.501 | 0.498 |
 | JPEG Q30 | 0.461 | 0.454 |
-| 50% downscale → upscale | 0.471 | 0.477 |
+| 50% downscale -> upscale | 0.471 | 0.477 |
 
 ### Degradation Parameters
 
-- **Motion blur:** 15×15 horizontal averaging kernel
-- **Low light:** gamma correction, γ = 2.0
+- **Motion blur:** 15x15 horizontal averaging kernel
+- **Low light:** gamma correction, gamma = 2.0
 - **JPEG:** quality = 30
 - **Downscale:** 50% of original dimensions using `INTER_AREA`, then restored using `INTER_LINEAR`
 
@@ -73,12 +73,48 @@ The same 500 images were used for every degradation.
 | Motion blur | -0.306 | **-0.300** |
 | Low light | -0.028 | **-0.022** |
 | JPEG Q30 | -0.068 | **-0.066** |
-| 50% down → up | -0.058 | **-0.043** |
+| 50% down -> up | -0.058 | **-0.043** |
 
-## 3. Conclusion
+INT8 has a smaller degradation-relative accuracy drop than FP32 for all four perturbations.
 
-INT8 did **not** lose more accuracy than FP32 under the tested degradations.
+---
 
-INT8 had a smaller mAP@0.5 drop from its own clean baseline in **all four degradation tests**. The results therefore provide no evidence that INT8 makes the detector more sensitive to these perturbations.
+## 3. Targeted Intervention: Motion Blur Calibration
 
-The results are **consistent with a possible regularization-like effect from quantization**, but they do not establish that quantization is the cause. The large common accuracy losses, particularly under motion blur, indicate that the degradation itself is the dominant source of accuracy loss in this experiment.
+Motion blur was selected as the worst degradation based on the largest mAP@0.5 loss.
+
+**Intervention:** Recalibrate INT8 using 1000 images containing clean images and motion blur with kernel sizes 5, 9, 15, 21, and 31.
+
+### Motion Blur Results
+
+| Metric | FP32 | Original INT8 | Motion-Calibrated INT8 |
+|---|---:|---:|---:|
+| mAP@0.5:0.95 | 0.156 | 0.153 | **0.158** |
+| mAP@0.5 | 0.223 | 0.220 | **0.225** |
+| AP@0.75 | 0.172 | 0.167 | **0.177** |
+| Small | 0.003 | 0.003 | 0.003 |
+| Medium | 0.176 | 0.166 | **0.181** |
+| Large | 0.387 | 0.376 | **0.383** |
+
+### Per-Class AP
+
+| Class | FP32 | Original INT8 | Motion-Calibrated INT8 |
+|---|---:|---:|---:|
+| person | 0.219 | 0.212 | **0.214** |
+| bicycle | 0.022 | 0.024 | 0.022 |
+| car | 0.096 | 0.096 | **0.099** |
+| traffic light | 0.053 | 0.040 | **0.055** |
+| stop sign | 0.389 | 0.392 | **0.399** |
+
+### Intervention Cost
+
+| Metric | Original INT8 | Motion-Calibrated INT8 | Δ |
+|---|---:|---:|---:|
+| Mean latency | 10.47 ms | 10.34 ms | -0.13 ms |
+| P95 latency | 11.38 ms | 11.33 ms | -0.05 ms |
+| FPS | 95.48 | 96.75 | +1.27 |
+| Model size | 3.3 MB | 3.3 MB | 0 MB |
+
+Motion-blur calibration improved mAP@0.5 from **0.220 to 0.225** and mAP@0.5:0.95 from **0.153 to 0.158**, with no measurable model-size or latency penalty.
+
+The improvement is small, representing partial recovery rather than a complete solution.

@@ -113,9 +113,7 @@ def main():
     benchmark("models/yolo11n_openvino_model")
     print("------------------------------------------------------------------------------")
     print("INT8")
-    benchmark("models/yolo11n_int8_openvino_model")
+    benchmark("models/yolo11n_int8_uncalibrated_openvino_model")
     
 
 
-if __name__=="__main__":
-    main()

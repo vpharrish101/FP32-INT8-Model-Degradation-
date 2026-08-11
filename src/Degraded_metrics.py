@@ -15,7 +15,7 @@ def main():
     benchmark("models/yolo11n_openvino_model",DEGRADE_ID="motion_blur")
     print("------------------------------------------------------------------------------")
     print("INT8")
-    benchmark("models/yolo11n_int8_openvino_model",DEGRADE_ID="motion_blur")
+    benchmark("models/yolo11n_int8_uncalibrated_openvino_model",DEGRADE_ID="motion_blur")
 
     print(
         """
@@ -31,7 +31,7 @@ def main():
     benchmark("models/yolo11n_openvino_model",DEGRADE_ID="low_light")
     print("------------------------------------------------------------------------------")
     print("INT8")
-    benchmark("models/yolo11n_int8_openvino_model",DEGRADE_ID="low_light")
+    benchmark("models/yolo11n_int8_uncalibrated_openvino_model",DEGRADE_ID="low_light")
 
     print(
         """
@@ -47,7 +47,7 @@ def main():
     benchmark("models/yolo11n_openvino_model",DEGRADE_ID="jpeg30")
     print("------------------------------------------------------------------------------")
     print("INT8")
-    benchmark("models/yolo11n_int8_openvino_model",DEGRADE_ID="jpeg30")
+    benchmark("models/yolo11n_int8_uncalibrated_openvino_model",DEGRADE_ID="jpeg30")
 
     print(
         """
@@ -63,7 +63,4 @@ def main():
     benchmark("models/yolo11n_openvino_model",DEGRADE_ID="downscale50")
     print("------------------------------------------------------------------------------")
     print("INT8")
-    benchmark("models/yolo11n_int8_openvino_model",DEGRADE_ID="downscale50")
-
-if __name__=="__main__":
-    main()
+    benchmark("models/yolo11n_int8_uncalibrated_openvino_model",DEGRADE_ID="downscale50")
