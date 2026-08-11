@@ -1,6 +1,6 @@
 # FP32 vs INT8 Evaluation Report
 
-## What I did:
+## Experiment Details: -
 
 ### 1. Model and Evaluation:
 
@@ -29,7 +29,7 @@
 
 ---
 
-## Results
+## Results: -
 
 ### 1. Clean Evaluation
 
@@ -146,18 +146,18 @@ The improvement is small, representing partial recovery rather than a complete s
 
 ---
 
-## What surprised me
+## Takeaways: -
 
 INT8 did not lose more accuracy than FP32 under any of the four tested degradations. Motion blur was also substantially more damaging than the other degradations for both models. I initially theorized that INT8 would perform slightly worse than FP32, but the evidence proved counterwise. My hypothesis is that, INT8 quantized model has an indirect regularization factor that makes it more or less robust to images, hence the small gap in similarities.
 
 The motion-blur calibration improved the INT8 model, but only by a small amount despite using multiple blur strengths in the calibration set. I hypothezie this as an issue of data processing and not a model centric issue, as: -
   1. INT8's calibration only changed activation values
   2. The blur actively disrupted the information present in the data to be able to make a good prediction.
-  3. Hence, this is a data issue, not a model issue.
+  3. Hence, this points more towards data/representation bottleneck, not a model issue.
 
 ---
 
-## What I would do with another week
+## Future Directions: -
 
 - Investigate layer-wise sensitivity to determine whether mixed-precision quantization could recover more of the motion-blur accuracy loss.
 - Develop a pre-processing CNN model that is trained on pairs of images and blurred images, to reduce blur in images before letting the models predict. 
