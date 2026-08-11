@@ -1,6 +1,6 @@
 description: Ultralytics YOLO11n model trained on /usr/src/ultralytics/ultralytics/cfg/datasets/coco.yaml
 author: Ultralytics
-date: '2026-08-11T14:08:04.513407+05:30'
+date: '2026-08-11T14:08:05.770090+05:30'
 version: 8.4.116
 license: AGPL-3.0 License (https://ultralytics.com/license)
 docs: https://docs.ultralytics.com
@@ -93,10 +93,10 @@ names:
   78: hair drier
   79: toothbrush
 args:
-  data: null
+  data: data/coco_calib.yaml
   batch: 1
-  fraction: 1.0
-  quantize: null
+  fraction: 0.06
+  quantize: 8
   dynamic: false
   nms: false
 channels: 3
