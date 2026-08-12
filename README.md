@@ -9,6 +9,7 @@
 - Evaluation focused on person, bicycle, car, traffic light, and stop sign (as intended).
 - Reported mAP, per-class AP, object-size AP, latency, FPS, and model size.
 - Measured single thread latency on CPU (we did this by setting the env var `INFERENCE_NUM_THREADS` to 1).
+- Initially, NanoDet-Plus was choosen to be used, owing to it's Edge AI use case. However, integration and measurement with the model had more complexities than yolo11n, like some functions in the collate file were outdated for PyTorch 3.12, requiring bug fixes. This shifted focus away from the core of experiment, hence yolo11n was favoured.
 
 ### 2. Degradation Testing:
 
